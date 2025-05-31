@@ -8,6 +8,7 @@ import Setting from "./pages/Setting";
 import GetStarted from "./pages/GetStarted";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Chatting from "./pages/Chatting";
 
 // Simulated login status (replace with actual auth logic later)
 const isLoggedIn = true;
@@ -58,6 +59,14 @@ const router = createBrowserRouter([
         element: <Setting />,
       },
     ],
+  },
+  {
+    path: "/chatting",
+    element: (
+      <ProtectedRoute redirectPath="/get-started">
+        <Chatting />
+      </ProtectedRoute>
+    ),
   },
   {
     path: "/get-started",
