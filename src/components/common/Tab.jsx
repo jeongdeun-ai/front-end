@@ -2,11 +2,11 @@ import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 
 const tabs = [
-  { name: "홈", path: "/" },
-  { name: "질문", path: "/question" },
-  { name: "기록", path: "/archive" },
-  { name: "일정", path: "/schedule" },
-  { name: "설정", path: "/settings" },
+  { name: "홈", path: "/", icon: "home" },
+  { name: "질문", path: "/question", icon: "chatbubble" },
+  { name: "기록", path: "/archive", icon: "archive" },
+  { name: "일정", path: "/schedule", icon: "calendar" },
+  { name: "설정", path: "/settings", icon: "settings" },
 ];
 
 export default function Tab() {
@@ -14,7 +14,10 @@ export default function Tab() {
     <TabBar>
       {tabs.map((tab) => (
         <StyledNavLink key={tab.path} to={tab.path} end={tab.path === "/"}>
-          {tab.name}
+          <StyledIcon>
+            <ion-icon name={tab.icon}></ion-icon>
+          </StyledIcon>
+          <span>{tab.name}</span>
         </StyledNavLink>
       ))}
     </TabBar>
@@ -25,6 +28,7 @@ const TabBar = styled.nav`
   display: flex;
   justify-content: space-around;
   padding: 12px 0;
+  padding-bottom: 36px;
   background-color: var(--background-primary);
   border-top: 0.5px solid var(--line-primary);
 `;
@@ -36,9 +40,29 @@ const StyledNavLink = styled(NavLink)`
   font-weight: 500;
   line-height: 127.3%;
   letter-spacing: 0.342px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+
+  transition: color 0.25s ease, transform 0.2s ease;
+
+  &:hover {
+    color: var(--icon-tertiary);
+  }
+
+  span {
+    margin-top: 2px;
+  }
 
   &.active {
     color: var(--icon-brand);
     font-weight: 700;
+  }
+`;
+
+const StyledIcon = styled.div`
+  ion-icon {
+    font-size: 24px;
   }
 `;
