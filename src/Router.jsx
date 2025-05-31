@@ -7,10 +7,10 @@ import Schedule from "./pages/Schedule";
 import Setting from "./pages/Setting";
 import GetStarted from "./pages/GetStarted";
 import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
+import Signup from "./pages/Signup";
 
 // Simulated login status (replace with actual auth logic later)
-const isLoggedIn = true;
+const isLoggedIn = false;
 
 // Protected Route wrapper component
 const ProtectedRoute = ({ children, redirectPath }) => {
@@ -79,7 +79,7 @@ const router = createBrowserRouter([
     path: "/signup",
     element: (
       <PublicRoute>
-        <SignUp />
+        <Signup />
       </PublicRoute>
     ),
   },
