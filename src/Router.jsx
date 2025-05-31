@@ -1,5 +1,5 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
-import TabLayout from "./components/common/TabLayout";
+import TabLayout from "./components/Tab/TabLayout";
 import Home from "./pages/Home";
 import Question from "./pages/Question";
 import Archive from "./pages/Archive";
