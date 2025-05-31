@@ -28,7 +28,7 @@ const Tab = styled.button`
   letter-spacing: 0.14px;
   text-align: center;
   color: ${(props) =>
-    props.active
+    props.$active
       ? "var(--text-primary, #171719)"
       : "var(--text-quaternary, #C2C4C8)"};
   cursor: pointer;
@@ -43,7 +43,7 @@ const Tab = styled.button`
     height: 2px;
     width: 100%;
     background: ${(props) =>
-      props.active ? "var(--text-primary, #171719)" : "transparent"};
+      props.$active ? "var(--text-primary, #171719)" : "transparent"};
   }
 `;
 
@@ -53,7 +53,7 @@ const TabBar = ({ activeCategory, setActiveCategory }) => {
       {categoryOptions.map((category) => (
         <Tab
           key={category}
-          active={activeCategory === category}
+          $active={activeCategory === category}
           onClick={() => setActiveCategory(category)}
         >
           {category}
