@@ -90,7 +90,10 @@
   --text-quaternary: var(--color-neutral-90);
   --text-brand: var(--color-light-blue-40);
   --text-brand-invert: var(--color-common-100);
-  --button-primary: var(--color-light-blue-40);
+  --button-brand: var(--color-light-blue-40);
+  --button-brand-hover: var(--color-light-blue-30);
+  --button-primary: var(--color-common-100);
+  --button-primary-hover: var(--color-neutral-98);
   --button-disable: var(--color-neutral-98);
   --line-primary: rgba(112, 115, 124, 0.2199999988079071);
   --line-secondary: rgba(112, 115, 124, 0.1599999964237213);

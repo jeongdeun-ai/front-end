@@ -18,7 +18,7 @@ export default App;
 
 const AppContainer = styled.div`
   width: 100%;
-  max-width: 480px;
+  max-width: 430px;
   margin: 0 auto;
   background-color: var(--background-primary);
   min-height: 100vh;
