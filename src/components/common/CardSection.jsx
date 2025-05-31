@@ -108,6 +108,7 @@ const TrailingIcon = styled.span`
   color: var(--icon-tertiary);
   cursor: pointer;
 `;
+
 const Contents = styled.div`
   display: flex;
   flex-direction: column;
