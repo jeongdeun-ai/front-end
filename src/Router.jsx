@@ -10,7 +10,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 
 // Simulated login status (replace with actual auth logic later)
-const isLoggedIn = false;
+const isLoggedIn = true;
 
 // Protected Route wrapper component
 const ProtectedRoute = ({ children, redirectPath }) => {

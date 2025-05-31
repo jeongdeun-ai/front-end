@@ -1,16 +1,26 @@
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const CardSection = ({
   title,
   trailingText,
   trailingIcon,
   withChevronRight = false,
+  navigateTo = "/", // 기본 경로
   children,
 }) => {
+  const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    if (withChevronRight && navigateTo) {
+      navigate(navigateTo);
+    }
+  };
+
   return (
     <SectionWrapper>
       <SectionHeader>
-        <TitleRow>
+        <TitleRow $clickable={withChevronRight} onClick={handleNavigate}>
           <Title>{title}</Title>
           {withChevronRight && (
             <InlineChevron>
@@ -52,6 +62,7 @@ const TitleRow = styled.div`
   display: flex;
   align-items: center;
   gap: 2px;
+  cursor: ${({ $clickable }) => ($clickable ? "pointer" : "default")};
 `;
 
 const Title = styled.h2`
@@ -100,7 +111,7 @@ const TrailingIcon = styled.span`
 const Contents = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
   width: 100%;
 `;
 

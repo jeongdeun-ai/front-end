@@ -4,8 +4,15 @@ import Card from "../components/common/Card";
 import Profile from "../components/Home/Profile";
 import CardSection from "../components/common/CardSection";
 import VitalStatCard from "../components/Home/VitalStatCard";
+import StatusSummary from "../components/Home/StatusSummary";
+import ScheduleTimeline from "../components/common/ScheduleTimeline";
 
 function Home() {
+  const scheduleData = [
+    { time: "오전 08:30", title: "아침 약 먹기", status: "done" },
+    { time: "오전 11:00", title: "산책", status: "missed" },
+    { time: "오후 02:00", title: "서울삼성병원 가기", status: "upcoming" },
+  ];
   return (
     <HomeWrapper>
       <Header>
@@ -30,6 +37,24 @@ function Home() {
             <VitalStatCard label="심박수" value="75 bpm" status="normal" />
             <VitalStatCard label="혈압" value="120/80 mmHg" status="caution" />
             <VitalStatCard label="체온" value="38.2 °C" status="danger" />
+          </CardSection>
+        </Card>
+        <Card>
+          <CardSection
+            title="일일 리포트"
+            withChevronRight
+            navigateTo="/archive"
+          >
+            <StatusSummary time="45분" progress="80%" mood="좋음" />
+          </CardSection>
+        </Card>
+        <Card>
+          <CardSection
+            title="오늘 일정"
+            withChevronRight
+            navigateTo="/schedule"
+          >
+            <ScheduleTimeline data={scheduleData} />
           </CardSection>
         </Card>
       </ContentArea>
@@ -72,7 +97,7 @@ const Title = styled.h1`
 const ContentArea = styled.main`
   flex: 1;
   overflow-y: auto;
-  padding: 0 20px;
+  padding: 0 20px 20px 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
