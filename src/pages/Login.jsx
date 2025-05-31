@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import Navigation from "../components/Navigation";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ const Login = () => {
 
   return (
     <div>
-      <h2>Login</h2>
+      <Navigation title="로그인" />
       <button onClick={handleLogin}>로그인</button>
     </div>
   );

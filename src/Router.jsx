@@ -10,7 +10,7 @@ import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 
 // Simulated login status (replace with actual auth logic later)
-const isLoggedIn = true;
+const isLoggedIn = false;
 
 // Protected Route wrapper component
 const ProtectedRoute = ({ children, redirectPath }) => {
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      <ProtectedRoute redirectPath="/login">
+      <ProtectedRoute redirectPath="/get-started">
         <TabLayout />
       </ProtectedRoute>
     ),

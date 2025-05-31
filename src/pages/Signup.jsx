@@ -1,5 +1,6 @@
 // SignUp.jsx
 import { useNavigate } from "react-router-dom";
+import Navigation from "../components/Navigation";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -10,7 +11,7 @@ const Signup = () => {
 
   return (
     <div>
-      <h2>Sign Up Page</h2>
+      <Navigation title="회원가입" />
       <button onClick={handleSignUp}>회원가입</button>
     </div>
   );
