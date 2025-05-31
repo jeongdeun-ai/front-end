@@ -58,7 +58,6 @@ AUTH/Login-feature
 ## 🚀 개발 환경 및 기술 스택
 
 - **React.js** (프레임워크)
-- **Styled Component** (스타일링)
 - **JavaScript**
 - **Vite** (번들러)
 - **ESLint & Prettier** (코드 스타일 관리)
