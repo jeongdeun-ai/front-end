@@ -12,22 +12,44 @@ const AudioRecorder = ({ onSendAudio }) => {
 
   const startRecording = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      // Request audio with specific constraints for better quality
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          channelCount: 1, // Mono audio
+          sampleRate: 16000, // 16kHz sample rate
+          bitrate: 128000, // 128kbps
+        },
+      });
+
       streamRef.current = stream;
-      mediaRecorderRef.current = new MediaRecorder(stream);
+
+      // Set MIME type to webm for better browser compatibility
+      const options = { mimeType: "audio/webm;codecs=opus" };
+      mediaRecorderRef.current = new MediaRecorder(stream, options);
       audioChunks.current = [];
 
       mediaRecorderRef.current.ondataavailable = (event) => {
-        audioChunks.current.push(event.data);
+        if (event.data.size > 0) {
+          audioChunks.current.push(event.data);
+        }
       };
 
       mediaRecorderRef.current.onstop = async () => {
-        const audioBlob = new Blob(audioChunks.current, { type: "audio/mp3" });
-        const url = URL.createObjectURL(audioBlob);
-        setAudioUrl(url);
+        try {
+          const audioBlob = new Blob(audioChunks.current, {
+            type: "audio/webm;codecs=opus",
+          });
+          const url = URL.createObjectURL(audioBlob);
+          setAudioUrl(url);
+        } catch (error) {
+          console.error("Error creating audio URL:", error);
+        }
       };
 
-      mediaRecorderRef.current.start();
+      // Collect data every second
+      mediaRecorderRef.current.start(1000);
       setRecording(true);
       setShowPreview(false);
     } catch (error) {
@@ -51,19 +73,50 @@ const AudioRecorder = ({ onSendAudio }) => {
   };
 
   const handleSend = () => {
-    if (audioUrl) {
-      fetch(audioUrl)
-        .then((response) => response.blob())
-        .then((blob) => {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            const base64 = reader.result.split(",")[1];
-            onSendAudio(base64);
-            setAudioUrl(null);
-            setShowPreview(false);
-          };
-          reader.readAsDataURL(blob);
-        });
+    if (!audioUrl || !audioChunks.current.length) {
+      console.error("No audio data to send");
+      return;
+    }
+
+    try {
+      // Combine all audio chunks into a single Blob
+      const audioBlob = new Blob(audioChunks.current, {
+        type: "audio/webm;codecs=opus",
+      });
+
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        try {
+          // The result is a base64 string like 'data:audio/webm;base64,...'
+          const base64Audio = reader.result.split(",")[1];
+          if (!base64Audio) {
+            throw new Error("Failed to encode audio to base64");
+          }
+
+          console.log("Sending audio data, size:", base64Audio.length);
+          onSendAudio(base64Audio);
+
+          // Reset state
+          setAudioUrl(null);
+          setShowPreview(false);
+          audioChunks.current = [];
+        } catch (error) {
+          console.error("Error processing audio data:", error);
+          alert("오디오 처리 중 오류가 발생했습니다.");
+        }
+      };
+
+      reader.onerror = (error) => {
+        console.error("FileReader error:", error);
+        alert("오디오를 읽는 중 오류가 발생했습니다.");
+      };
+
+      // Read the Blob as base64
+      reader.readAsDataURL(audioBlob);
+    } catch (error) {
+      console.error("Error preparing audio for sending:", error);
+      alert("오디오 전송 준비 중 오류가 발생했습니다.");
     }
   };
 

@@ -10,8 +10,8 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Chatting from "./pages/Chatting";
 
-// Simulated login status (replace with actual auth logic later)
-const isLoggedIn = true;
+// Check if user is logged in by looking for access token
+const isLoggedIn = !!localStorage.getItem("accessToken");
 
 // Protected Route wrapper component
 const ProtectedRoute = ({ children, redirectPath }) => {

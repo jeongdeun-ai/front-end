@@ -9,6 +9,21 @@ function Setting() {
     navigate("/chatting");
   };
 
+  const handleLogout = () => {
+    try {
+      // Clear all auth data from localStorage
+      localStorage.clear(); // Clear everything to be safe
+
+      // Force a hard redirect to the get-started page
+      // This ensures all app state is completely reset
+      window.location.href = "/get-started";
+    } catch (error) {
+      console.error("Error during logout:", error);
+      // If there's an error, still try to redirect
+      window.location.href = "/get-started";
+    }
+  };
+
   return (
     <SettingWrapper>
       <Header>
@@ -17,7 +32,9 @@ function Setting() {
           <ion-icon name="code-slash"></ion-icon>
         </StyledIcon>
       </Header>
-      <ContentArea></ContentArea>
+      <ContentArea>
+        <LogoutButton onClick={handleLogout}>로그아웃</LogoutButton>
+      </ContentArea>
     </SettingWrapper>
   );
 }
@@ -54,11 +71,27 @@ const StyledIcon = styled.div`
   }
 `;
 
-const ContentArea = styled.main`
-  flex: 1;
-  overflow-y: auto;
-  padding: 20px;
+const ContentArea = styled.div`
   width: 100%;
+  padding: 20px;
+  flex-grow: 1;
+`;
+
+const LogoutButton = styled.button`
+  width: 100%;
+  padding: 15px;
+  background-color: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 20px;
+
+  &:hover {
+    background-color: #ff0000;
+  }
 `;
 
 export default Setting;
