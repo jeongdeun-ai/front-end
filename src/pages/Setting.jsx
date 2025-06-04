@@ -14,13 +14,19 @@ function Setting() {
       // Clear all auth data from localStorage
       localStorage.clear(); // Clear everything to be safe
 
-      // Force a hard redirect to the get-started page
-      // This ensures all app state is completely reset
-      window.location.href = "/get-started";
+      // Navigate to the get-started page using react-router's navigate
+      // This ensures client-side routing is used instead of a full page reload
+      navigate("/get-started", { replace: true });
+      
+      // Force a small delay and then reload the page to reset the app state
+      // This is a fallback to ensure the app state is completely reset
+      setTimeout(() => {
+        window.location.reload();
+      }, 100);
     } catch (error) {
       console.error("Error during logout:", error);
-      // If there's an error, still try to redirect
-      window.location.href = "/get-started";
+      // Fallback to a full page reload if navigation fails
+      window.location.href = "/";
     }
   };
 
