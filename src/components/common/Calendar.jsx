@@ -95,7 +95,6 @@ const CalendarContainer = styled.div`
   padding: 16px 16px 8px;
   background: var(--background-primary, #fff);
   border-radius: 14px;
-  box-shadow: 0px 10px 40px 0px rgba(29, 22, 23, 0.07);
 `;
 
 const CalendarHeader = styled.div`

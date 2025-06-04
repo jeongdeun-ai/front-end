@@ -4,7 +4,7 @@ import Card from "../components/common/Card";
 import QuestionCard from "../components/Question/QuestionCard";
 import ConfirmModal from "../components/common/ConfirmModal";
 import { useNavigate } from "react-router-dom";
-import TabBar from "../components/Question/TabBar";
+import TabBar from "../components/common/TabBar";
 import TextArea from "../components/TextArea";
 
 function Question() {
@@ -25,6 +25,14 @@ function Question() {
     setPendingQuestion(question);
     setShowModal(true);
   };
+
+  const categoryOptions = ["기분", "식사", "약", "추억"];
+
+  // Convert category options to tabs format
+  const categoryTabs = categoryOptions.map((category) => ({
+    id: category,
+    label: category,
+  }));
 
   return (
     <QuestionWrapper>
@@ -51,10 +59,12 @@ function Question() {
           </Card>
         </Content>
         <Content>
-          <SubTitle>주제별 질문</SubTitle>
+          <SubTitle>카테고리별 질문</SubTitle>
           <TabBar
-            activeCategory={activeCategory}
-            setActiveCategory={setActiveCategory}
+            tabs={categoryTabs}
+            activeTab={activeCategory}
+            onTabChange={setActiveCategory}
+            variant="category"
           />
           <Card>
             <QuestionCard

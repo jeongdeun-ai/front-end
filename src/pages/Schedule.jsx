@@ -50,8 +50,8 @@ const Title = styled.h1`
 const ContentArea = styled.main`
   flex: 1;
   overflow-y: auto;
-  padding: 20px;
   width: 100%;
+  padding: 0;
 `;
 
 export default Schedule;
