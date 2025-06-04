@@ -1,13 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import Calendar from "../components/common/Calendar";
 
 function Archive() {
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const handleDateSelect = (date) => {
+    setSelectedDate(date);
+    // You can add additional logic here when a date is selected
+  };
+
   return (
     <ArchiveWrapper>
       <Header>
         <Title>기록</Title>
       </Header>
-      <ContentArea></ContentArea>
+      <ContentArea>
+        <Calendar selectedDate={selectedDate} onDateSelect={handleDateSelect} />
+        {/* Add your archive list or other components below the calendar */}
+      </ContentArea>
     </ArchiveWrapper>
   );
 }

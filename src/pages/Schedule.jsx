@@ -1,13 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
+import Calendar from "../components/common/Calendar";
 
 function Schedule() {
+  const [selectedDate, setSelectedDate] = useState(new Date());
+
+  const handleDateSelect = (date) => {
+    setSelectedDate(date);
+    // You can add additional logic here when a date is selected
+  };
+
   return (
     <ScheduleWrapper>
       <Header>
         <Title>일정</Title>
       </Header>
-      <ContentArea></ContentArea>
+      <ContentArea>
+        <Calendar selectedDate={selectedDate} onDateSelect={handleDateSelect} />
+        {/* Add your schedule list or other components below the calendar */}
+      </ContentArea>
     </ScheduleWrapper>
   );
 }

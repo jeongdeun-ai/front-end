@@ -1,4 +1,5 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import styled from "styled-components";
 
 const tabs = [
@@ -9,11 +10,30 @@ const tabs = [
   { name: "설정", path: "/settings", icon: "settings" },
 ];
 
-export default function Tab() {
+export default function Tab({ onTabChange }) {
+  const location = useLocation();
+  
+  // Call onTabChange when the location changes
+  useEffect(() => {
+    if (onTabChange) {
+      onTabChange();
+    }
+  }, [location.pathname, onTabChange]);
+
   return (
     <TabBar>
       {tabs.map((tab) => (
-        <StyledNavLink key={tab.path} to={tab.path} end={tab.path === "/"}>
+        <StyledNavLink 
+          key={tab.path} 
+          to={tab.path} 
+          end={tab.path === "/"}
+          onClick={() => {
+            // Call onTabChange when a tab is clicked
+            if (onTabChange) {
+              onTabChange();
+            }
+          }}
+        >
           <StyledIcon>
             <ion-icon name={tab.icon}></ion-icon>
           </StyledIcon>

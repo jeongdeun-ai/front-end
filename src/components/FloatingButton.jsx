@@ -7,7 +7,6 @@ const FloatingButton = ({
   type = "button",
   status = "default", // 'default' or 'loading'
 }) => {
-  console.log("FloatingButton.jsx: received status =", status);
   return (
     <Wrapper>
       <Button
@@ -17,11 +16,9 @@ const FloatingButton = ({
         $isLoading={status === "loading"}
       >
         {status === "loading" ? (
-          <SpinnerContainer>
-            <ClipLoader color="white" size={20} />
-          </SpinnerContainer>
+          <ClipLoader color="white" size={20} />
         ) : (
-          children
+          <ButtonContent>{children}</ButtonContent>
         )}
       </Button>
     </Wrapper>
@@ -32,14 +29,6 @@ export default FloatingButton;
 
 const Wrapper = styled.div`
   padding: 20px;
-`;
-
-const SpinnerContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
 `;
 
 const Button = styled.button`
@@ -56,13 +45,22 @@ const Button = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 8px;
-  line-height: 150%;
-  letter-spacing: 0.091px;
-
+  min-height: 56px; /* Fixed height to match both states */
   transition: background 0.25s ease, transform 0.2s ease;
 
   &:hover {
     background: var(--button-brand-hover);
   }
+
+  &:active {
+    transform: scale(0.98);
+  }
+`;
+
+const ButtonContent = styled.span`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px; /* Match the height of the spinner */
+  line-height: 24px;
 `;

@@ -1,15 +1,29 @@
 import styled from "styled-components";
 import "./styles/color.css";
 import "./styles/font.css";
-import { RouterProvider } from "react-router-dom";
+import { RouterProvider, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 import router from "./Router";
 import { GlobalStyles } from "./styles/GlobalStyles";
+
+// This component will make sure the page scrolls to the top on route changes
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+};
 
 function App() {
   return (
     <AppContainer>
       <GlobalStyles />
-      <RouterProvider router={router} />
+      <RouterProvider router={router}>
+        <ScrollToTop />
+      </RouterProvider>
     </AppContainer>
   );
 }

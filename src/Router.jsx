@@ -28,69 +28,79 @@ const PublicRoute = ({ children }) => {
   return children;
 };
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: (
+        <ProtectedRoute redirectPath="/get-started">
+          <TabLayout />
+        </ProtectedRoute>
+      ),
+      children: [
+        {
+          index: true,
+          element: <Home />,
+        },
+        {
+          path: "question",
+          element: <Question />,
+        },
+        {
+          path: "archive",
+          element: <Archive />,
+        },
+        {
+          path: "schedule",
+          element: <Schedule />,
+        },
+        {
+          path: "settings",
+          element: <Setting />,
+        },
+      ],
+    },
+    {
+      path: "/chatting",
+      element: (
+        <ProtectedRoute redirectPath="/get-started">
+          <Chatting />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/get-started",
+      element: (
+        <PublicRoute>
+          <GetStarted />
+        </PublicRoute>
+      ),
+    },
+    {
+      path: "/login",
+      element: (
+        <PublicRoute>
+          <Login />
+        </PublicRoute>
+      ),
+    },
+    {
+      path: "/signup",
+      element: (
+        <PublicRoute>
+          <Signup />
+        </PublicRoute>
+      ),
+    },
+  ],
   {
-    path: "/",
-    element: (
-      <ProtectedRoute redirectPath="/get-started">
-        <TabLayout />
-      </ProtectedRoute>
-    ),
-    children: [
-      {
-        path: "/",
-        element: <Home />,
-      },
-      {
-        path: "/question",
-        element: <Question />,
-      },
-      {
-        path: "/archive",
-        element: <Archive />,
-      },
-      {
-        path: "/schedule",
-        element: <Schedule />,
-      },
-      {
-        path: "/settings",
-        element: <Setting />,
-      },
-    ],
-  },
-  {
-    path: "/chatting",
-    element: (
-      <ProtectedRoute redirectPath="/get-started">
-        <Chatting />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/get-started",
-    element: (
-      <PublicRoute>
-        <GetStarted />
-      </PublicRoute>
-    ),
-  },
-  {
-    path: "/login",
-    element: (
-      <PublicRoute>
-        <Login />
-      </PublicRoute>
-    ),
-  },
-  {
-    path: "/signup",
-    element: (
-      <PublicRoute>
-        <Signup />
-      </PublicRoute>
-    ),
-  },
-]);
+    // This will scroll to top on navigation
+    future: {
+      v7_startTransition: true,
+    },
+    // This will handle scroll restoration
+    scrollRestoration: "manual",
+  }
+);
 
 export default router;

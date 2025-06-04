@@ -9,6 +9,7 @@ import StatusSummary from "../components/Home/StatusSummary";
 import ScheduleTimeline from "../components/common/ScheduleTimeline";
 import Loading from "../components/common/Loading";
 import { getParentEventInfo, getDailyReport } from "../api/parent";
+import { ClipLoader } from "react-spinners";
 
 function Home() {
   const navigate = useNavigate();
@@ -122,7 +123,13 @@ function Home() {
   }, [navigate]);
 
   if (isLoading) {
-    return <Loading message="어르신 정보를 불러오는 중입니다..." />;
+    return (
+      <HomeWrapper>
+        <LoadingContainer>
+          <ClipLoader color="var(--primary)" size={40} />
+        </LoadingContainer>
+      </HomeWrapper>
+    );
   }
 
   if (error) {
@@ -194,6 +201,15 @@ function Home() {
     </HomeWrapper>
   );
 }
+
+const LoadingContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  min-height: 300px;
+  width: 100%;
+`;
 
 const HomeWrapper = styled.div`
   display: flex;
