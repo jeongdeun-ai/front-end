@@ -7,18 +7,22 @@ import styled from "styled-components";
 import { login } from "../api/auth";
 
 const Login = () => {
+  console.log("Login.jsx: Component function started");
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (field) => (e) => {
     setFormData((prev) => ({ ...prev, [field]: e.target.value }));
   };
 
   const handleLogin = async () => {
+    setIsLoading(true);
+    console.log("Login.jsx: handleLogin started, setting isLoading to true");
     try {
       console.log("Login attempt with email:", formData.email);
       const response = await login(formData.email, formData.password);
@@ -40,7 +44,7 @@ const Login = () => {
 
         console.log("User info stored, navigating to home page");
         // Navigate to home page with replace to prevent going back to login
-        window.location.href = "/";
+        navigate("/", { replace: true });
       } else {
         console.error("Login failed: Invalid response format", response);
         setError("로그인에 실패했습니다. 응답 형식이 올바르지 않습니다.");
@@ -52,9 +56,15 @@ const Login = () => {
           err.message ||
           "로그인 중 오류가 발생했습니다."
       );
+    } finally {
+      setIsLoading(false);
+      console.log(
+        "Login.jsx: handleLogin finished, setting isLoading to false"
+      );
     }
   };
 
+  console.log("Login.jsx: isLoading =", isLoading);
   return (
     <LoginWrapper>
       <Navigation title="로그인" />
@@ -75,7 +85,12 @@ const Login = () => {
         />
         {error && <ErrorMessage>{error}</ErrorMessage>}
       </Content>
-      <FloatingButton onClick={handleLogin}>로그인</FloatingButton>
+      <FloatingButton
+        onClick={handleLogin}
+        status={isLoading ? "loading" : "default"}
+      >
+        로그인
+      </FloatingButton>
     </LoginWrapper>
   );
 };

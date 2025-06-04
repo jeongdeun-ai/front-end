@@ -10,12 +10,10 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Chatting from "./pages/Chatting";
 
-// Check if user is logged in by looking for access token
-const isLoggedIn = !!localStorage.getItem("accessToken");
-
 // Protected Route wrapper component
 const ProtectedRoute = ({ children, redirectPath }) => {
-  if (!isLoggedIn) {
+  const isLoggedInNow = !!localStorage.getItem("accessToken");
+  if (!isLoggedInNow) {
     return <Navigate to={redirectPath} replace />;
   }
   return children;
@@ -23,7 +21,8 @@ const ProtectedRoute = ({ children, redirectPath }) => {
 
 // Public Route wrapper component (redirects to home if logged in)
 const PublicRoute = ({ children }) => {
-  if (isLoggedIn) {
+  const isLoggedInNow = !!localStorage.getItem("accessToken");
+  if (isLoggedInNow) {
     return <Navigate to="/" replace />;
   }
   return children;
