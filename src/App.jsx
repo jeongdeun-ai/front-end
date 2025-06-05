@@ -32,10 +32,11 @@ export default App;
 
 const AppContainer = styled.div`
   width: 100%;
-  max-width: 440px;
+  max-width: 480px;
   margin: 0 auto;
   background-color: var(--background-primary);
   min-height: 100vh;
+  max-height: 956px;
   display: flex;
   flex-direction: column;
 `;

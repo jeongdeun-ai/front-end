@@ -6,14 +6,19 @@ import logo from "../../assets/svg/favicon.svg";
 import { getRecordsByDate } from "../../api/recordsApi";
 import { ClipLoader } from "react-spinners";
 
-// Helper function to get parent's name from localStorage
-const getParentName = () => {
+// Helper function to get parent's name from parentInfo or fallback to localStorage
+const getParentName = (parentInfo) => {
+  // First try to get from parentInfo prop
+  if (parentInfo?.name) {
+    return parentInfo.name;
+  }
+
+  // Fallback to localStorage if parentInfo is not available
   try {
     const userInfo = localStorage.getItem("userInfo");
     if (!userInfo) return "어르신";
 
     const userData = JSON.parse(userInfo);
-    // Only use parent_name, default to "어르신" if not available
     return userData.parent_name || "어르신";
   } catch (e) {
     console.error("Error parsing user info:", e);
@@ -21,7 +26,7 @@ const getParentName = () => {
   }
 };
 
-const AllRecordsContent = ({ date }) => {
+const AllRecordsContent = ({ date, parentInfo }) => {
   const [records, setRecords] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -91,7 +96,9 @@ const AllRecordsContent = ({ date }) => {
             <MessageContent>
               <MessageHeader>
                 <SenderName $isAI={record.sender === "gpt"}>
-                  {record.sender === "gpt" ? "AI (정든이)" : getParentName()}
+                  {record.sender === "gpt"
+                    ? "AI (정든이)"
+                    : getParentName(parentInfo)}
                 </SenderName>
                 <MessageTime>{formatTime(record.timestamp)}</MessageTime>
               </MessageHeader>

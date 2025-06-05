@@ -6,6 +6,7 @@ import DailyReportCard from "../components/archive/DailyReportCard";
 import AllRecordsContent from "../components/archive/AllRecordsContent";
 import { getDailyReport } from "../api/reportApi";
 import { getRecordsByDate } from "../api/recordsApi";
+import { getParentEventInfo } from "../api/parent";
 import Loading from "../components/common/Loading";
 import { format, parseISO } from "date-fns";
 import { ko } from "date-fns/locale";
@@ -32,6 +33,29 @@ function Archive() {
   const [records, setRecords] = useState([]);
   const [isRecordsLoading, setIsRecordsLoading] = useState(false);
   const [recordsError, setRecordsError] = useState(null);
+  const [parentInfo, setParentInfo] = useState(null);
+  const [isParentInfoLoading, setIsParentInfoLoading] = useState(true);
+  const [parentInfoError, setParentInfoError] = useState(null);
+
+  // Fetch parent info when component mounts
+  useEffect(() => {
+    const fetchParentInfo = async () => {
+      try {
+        setIsParentInfoLoading(true);
+        const data = await getParentEventInfo();
+        if (data?.parent_info) {
+          setParentInfo(data.parent_info);
+        }
+      } catch (err) {
+        console.error("Error fetching parent info:", err);
+        setParentInfoError("부모 정보를 불러오는 중 오류가 발생했습니다.");
+      } finally {
+        setIsParentInfoLoading(false);
+      }
+    };
+
+    fetchParentInfo();
+  }, []);
 
   const fetchDailyReport = useCallback(
     async (date) => {
@@ -130,8 +154,9 @@ function Archive() {
             <AllRecordsContent
               date={selectedDate}
               records={records}
-              isLoading={isRecordsLoading}
-              error={recordsError}
+              isLoading={isRecordsLoading || isParentInfoLoading}
+              error={recordsError || parentInfoError}
+              parentInfo={parentInfo}
             />
           )}
         </ContentContainer>
