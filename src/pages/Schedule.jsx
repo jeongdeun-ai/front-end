@@ -9,6 +9,7 @@ import CardSection from "../components/common/CardSection";
 import TabBar from "../components/common/TabBar";
 import { getEventsForDate } from "../api/scheduleApi";
 import { format } from "date-fns";
+import { ClipLoader } from "react-spinners";
 import { ko } from "date-fns/locale";
 
 function Schedule() {
@@ -80,7 +81,9 @@ function Schedule() {
                 withChevronRight={false}
               >
                 {isLoading ? (
-                  <LoadingText>일정을 불러오는 중...</LoadingText>
+                  <LoadingWrapper>
+                    <ClipLoader color="var(--text-primary)" size={20} />
+                  </LoadingWrapper>
                 ) : error ? (
                   <ErrorText>{error}</ErrorText>
                 ) : events.length > 0 ? (
@@ -91,11 +94,7 @@ function Schedule() {
               </CardSection>
             </Card>
           ) : (
-            <Card>
-              <CardSection title="약 일정" withChevronRight={false}>
-                <MedicineSchedule />
-              </CardSection>
-            </Card>
+            <MedicineSchedule />
           )}
         </ContentContainer>
       </ContentArea>
@@ -147,11 +146,12 @@ const ContentContainer = styled.div`
   padding: 20px;
 `;
 
-const LoadingText = styled.div`
-  color: var(--text-secondary);
-  text-align: center;
-  padding: 20px 0;
-  font-size: 14px;
+const LoadingWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  height: 250px;
 `;
 
 const ErrorText = styled.div`

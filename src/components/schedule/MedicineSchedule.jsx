@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { getMedicineSchedule } from "../../api/scheduleApi";
+import { ClipLoader } from "react-spinners";
 
 const TIME_SLOT_LABELS = {
   morning: "아침 약",
@@ -51,7 +52,11 @@ const MedicineSchedule = () => {
   }, []);
 
   if (isLoading) {
-    return <LoadingText>약 일정을 불러오는 중...</LoadingText>;
+    return (
+      <LoadingWrapper>
+        <ClipLoader color="var(--text-primary)" size={20} />
+      </LoadingWrapper>
+    );
   }
 
   if (error) {
@@ -143,11 +148,12 @@ const Dose = styled.div`
   color: var(--text-tertiary);
 `;
 
-const LoadingText = styled.div`
-  padding: 20px 0;
-  text-align: center;
-  color: var(--text-secondary);
-  font-size: 14px;
+const LoadingWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  height: 250px;
 `;
 
 const ErrorText = styled.div`
