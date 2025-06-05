@@ -30,6 +30,15 @@ function Question() {
   const [loading, setLoading] = useState(true);
   const [isSending, setIsSending] = useState(false);
 
+  const getFormattedTime = () => {
+    const now = new Date();
+    const hours = String(now.getHours()).padStart(2, "0");
+    const minutes = String(now.getMinutes()).padStart(2, "0");
+    const period = hours >= 12 ? "오후" : "오전";
+    const formattedHours = hours % 12 || 12;
+    return `${period} ${formattedHours}:${minutes} 기준`;
+  };
+
   const handleSend = async () => {
     try {
       setIsSending(true);
@@ -41,8 +50,8 @@ function Question() {
         state: {
           scrollToBottom: true,
           activeTab: TAB_TYPES.ALL_RECORDS,
-          selectedDate: today
-        }
+          selectedDate: today,
+        },
       });
     } catch (error) {
       console.error("Error sending question:", error);
@@ -127,9 +136,15 @@ function Question() {
       <Header>
         <Title>질문</Title>
         <TrailingContents>
-          <TrailingText>오전 10:46 기준</TrailingText>
+          <TrailingText>
+            {loading ? "데이터 불러오는 중..." : getFormattedTime()}
+          </TrailingText>
           <TrailingIcon>
-            <ion-icon name="reload-outline"></ion-icon>
+            <ion-icon
+              name="reload-outline"
+              onClick={fetchRecommendedQuestion}
+              style={{ cursor: "pointer" }}
+            />
           </TrailingIcon>
         </TrailingContents>
       </Header>

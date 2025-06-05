@@ -91,7 +91,11 @@ function Schedule() {
               </CardSection>
             </Card>
           ) : (
-            <MedicineSchedule />
+            <Card>
+              <CardSection title="약 일정" withChevronRight={false}>
+                <MedicineSchedule />
+              </CardSection>
+            </Card>
           )}
         </ContentContainer>
       </ContentArea>
