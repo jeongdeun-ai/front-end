@@ -37,7 +37,10 @@ const Calendar = ({ selectedDate, onDateSelect }) => {
   const prevMonth = () => setCurrentMonth(subMonths(currentMonth, 1));
 
   const handleDateClick = (day) => {
-    if (day && onDateSelect) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (day && onDateSelect && day <= today) {
       onDateSelect(day);
     }
   };
@@ -64,15 +67,20 @@ const Calendar = ({ selectedDate, onDateSelect }) => {
 
       <DaysContainer>
         {allDays.map((day, index) => {
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+
           const isSelected =
             day && selectedDate && isSameDay(day, selectedDate);
           const isCurrentMonth = day && isSameMonth(day, currentMonth);
+          const isFuture = day > today;
 
           return (
             <DayCell
               key={index}
               $isSelected={isSelected}
               $isCurrentMonth={isCurrentMonth}
+              $isFuture={isFuture}
               onClick={() => handleDateClick(day)}
             >
               {day && (
@@ -147,23 +155,34 @@ const DaysContainer = styled.div`
 const DayCell = styled.div`
   aspect-ratio: 1;
   display: flex;
-  align-items: center;
   justify-content: center;
-  border-radius: 8px;
-  cursor: pointer;
-  background: ${(props) =>
-    props.$isSelected ? "var(--background-brand)" : "transparent"};
+  align-items: center;
+  cursor: ${(props) => (props.$isFuture ? "not-allowed" : "pointer")};
+  position: relative;
   color: ${(props) =>
     props.$isSelected
-      ? "var(--text-brand-invert)"
+      ? "var(--text-on-primary, #fff)"
+      : props.$isFuture
+      ? "var(--text-disabled, rgba(0, 0, 0, 0.24))"
       : props.$isCurrentMonth
-      ? "var(--text-primary)"
-      : "var(--text-tertiary)"};
-  opacity: ${(props) => (!props.$isCurrentMonth ? 0.5 : 1)};
+      ? "var(--text-primary, #171719)"
+      : "var(--text-disabled, rgba(0, 0, 0, 0.24))"};
+  background: ${(props) =>
+    props.$isSelected ? "var(--button-brand)" : "transparent"};
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  transition: all 0.2s ease;
+  opacity: ${(props) => (props.$isFuture ? 0.5 : 1)};
 
   &:hover {
     background: ${(props) =>
-      !props.$isSelected && "var(--background-secondary)"};
+      props.$isSelected
+        ? "var(--button-brand-hover)"
+        : !props.$isFuture
+        ? "var(--background-hover, rgba(0, 0, 0, 0.04))"
+        : "inherit"};
   }
 `;
 

@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import styled from "styled-components";
 import Calendar from "../components/common/Calendar";
 import TabBar from "../components/common/TabBar";
 import DailyReportCard from "../components/archive/DailyReportCard";
+import AllRecordsContent from "../components/archive/AllRecordsContent";
 import { getDailyReport } from "../api/reportApi";
+import { getRecordsByDate } from "../api/recordsApi";
 import Loading from "../components/common/Loading";
 import { format, parseISO } from "date-fns";
 import { ko } from "date-fns/locale";
@@ -27,22 +29,49 @@ function Archive() {
   const [dailyReport, setDailyReport] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [records, setRecords] = useState([]);
+  const [isRecordsLoading, setIsRecordsLoading] = useState(false);
+  const [recordsError, setRecordsError] = useState(null);
 
-  const fetchDailyReport = async (date) => {
-    if (activeTab !== TAB_TYPES.DAILY_REPORT) return;
+  const fetchDailyReport = useCallback(
+    async (date) => {
+      if (activeTab !== TAB_TYPES.DAILY_REPORT) return;
 
-    setIsLoading(true);
-    setError(null);
-    try {
-      const data = await getDailyReport(date);
-      setDailyReport(data);
-    } catch (err) {
-      console.error("Error fetching daily report:", err);
-      setError("데이터를 불러오는 중 오류가 발생했습니다.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+      setIsLoading(true);
+      setError(null);
+
+      try {
+        const data = await getDailyReport(date);
+        setDailyReport(data);
+      } catch (err) {
+        console.error("Error fetching daily report:", err);
+        setError("데이터를 불러오는 중 오류가 발생했습니다.");
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [activeTab]
+  );
+
+  const fetchRecords = useCallback(
+    async (date) => {
+      if (activeTab !== TAB_TYPES.ALL_RECORDS) return;
+
+      setIsRecordsLoading(true);
+      setRecordsError(null);
+
+      try {
+        const data = await getRecordsByDate(date);
+        setRecords(data);
+      } catch (err) {
+        console.error("Error fetching records:", err);
+        setRecordsError("기록을 불러오는 중 오류가 발생했습니다.");
+      } finally {
+        setIsRecordsLoading(false);
+      }
+    },
+    [activeTab]
+  );
 
   const handleDateSelect = (date) => {
     setSelectedDate(date);
@@ -53,8 +82,12 @@ function Archive() {
   };
 
   useEffect(() => {
-    fetchDailyReport(selectedDate);
-  }, [selectedDate, activeTab]);
+    if (activeTab === TAB_TYPES.DAILY_REPORT) {
+      fetchDailyReport(selectedDate);
+    } else {
+      fetchRecords(selectedDate);
+    }
+  }, [selectedDate, activeTab, fetchDailyReport, fetchRecords]);
 
   const tabs = [
     { id: TAB_TYPES.DAILY_REPORT, label: "일일 리포트" },
@@ -70,13 +103,6 @@ function Archive() {
         error={error}
       />
     </DailyReportContentContainer>
-  );
-
-  const AllRecordsContent = ({ date }) => (
-    <div>
-      <h3>{format(date, "yyyy년 M월 d일")}의 전체 기록 보기</h3>
-      {/* Add your all records content here */}
-    </div>
   );
 
   return (
@@ -101,7 +127,12 @@ function Archive() {
               error={error}
             />
           ) : (
-            <AllRecordsContent date={selectedDate} />
+            <AllRecordsContent
+              date={selectedDate}
+              records={records}
+              isLoading={isRecordsLoading}
+              error={recordsError}
+            />
           )}
         </ContentContainer>
       </ContentArea>
@@ -136,7 +167,6 @@ const Title = styled.h1`
 const ContentArea = styled.div`
   flex: 1;
   overflow-y: auto;
-  padding: 20px;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -145,14 +175,13 @@ const ContentArea = styled.div`
 
 const ContentContainer = styled.div`
   width: 100%;
-  max-width: 375px;
+  padding: 20px;
 `;
 
 const DailyReportContentContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
-  margin-top: 16px;
 `;
 
 export default Archive;
