@@ -6,7 +6,14 @@ const Profile = ({ name, birth, age, profileImage }) => {
 
   return (
     <Wrapper>
-      <ProfileImage src={profileImage} alt={`${name}의 프로필`} />
+      <ProfileImage
+        src={profileImage || DEFAULT_PROFILE_IMAGE}
+        alt={`${name}의 프로필`}
+        onError={(e) => {
+          const img = e.target;
+          img.src = DEFAULT_PROFILE_IMAGE;
+        }}
+      />
       <TextWrapper>
         <NameText>{name} 어르신</NameText>
         <InfoText>
@@ -27,6 +34,9 @@ const Wrapper = styled.div`
   gap: 15px;
   align-self: stretch;
 `;
+
+const DEFAULT_PROFILE_IMAGE =
+  "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
 const ProfileImage = styled.img`
   width: 56px;

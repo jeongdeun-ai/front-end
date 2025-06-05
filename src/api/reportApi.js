@@ -2,7 +2,7 @@ import { instance } from "./instance";
 import { format } from "date-fns";
 
 export const getDailyReport = async (date) => {
-  const formattedDate = format(new Date(date), "yyyy-MM-dd");
+  const formattedDate = format(date, "yyyy-MM-dd");
   console.log("[reportApi] Fetching daily report for date:", formattedDate);
 
   try {
@@ -16,7 +16,15 @@ export const getDailyReport = async (date) => {
       headers: response.headers,
     });
 
-    return response.data;
+    // If data is null or undefined, return default values
+    const defaultReport = {
+      total_chat_time: 0,
+      event_success_ratio: 0,
+      parent_emotion: "-",
+      summary: "",
+    };
+
+    return response.data || defaultReport;
   } catch (error) {
     const errorData = {
       status: error.response?.status,

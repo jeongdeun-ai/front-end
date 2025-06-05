@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { ClipLoader } from "react-spinners";
 
 /**
  * @description
@@ -19,6 +20,7 @@ const ConfirmModal = ({
   cancelText = "취소",
   onConfirm,
   onCancel,
+  loading = false,
 }) => {
   return (
     <ModalOverlay>
@@ -29,7 +31,13 @@ const ConfirmModal = ({
         </Information>
         <Actions>
           <button onClick={onCancel}>{cancelText}</button>
-          <button onClick={onConfirm}>{confirmText}</button>
+          <button onClick={onConfirm} disabled={loading}>
+            {loading ? (
+              <ClipLoader color="var(--text-brand)" size={20} />
+            ) : (
+              confirmText
+            )}
+          </button>
         </Actions>
       </ModalContainer>
     </ModalOverlay>

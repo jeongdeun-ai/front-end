@@ -39,10 +39,10 @@ const DailyReportCard = ({ date, data, isLoading, error }) => {
     return <NoDataMessage>해당 날짜의 데이터가 없습니다.</NoDataMessage>;
   }
 
-  const { total_chat_time, event_success_ratio, parent_emotion, summary } =
-    data;
+  const { total_chat_time = 0, event_success_ratio = 0, parent_emotion = "-", summary = "" } =
+    data || {};
   const moodText = getMoodText(parent_emotion);
-  const progressPercentage = Math.round(event_success_ratio);
+  const progressPercentage = Math.round(event_success_ratio) || 0;
 
   return (
     <Card padding="16px" width="335px">

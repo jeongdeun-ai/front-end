@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import styled from "styled-components";
 import Calendar from "../components/common/Calendar";
 import TabBar from "../components/common/TabBar";
@@ -10,6 +10,7 @@ import { getParentEventInfo } from "../api/parent";
 import Loading from "../components/common/Loading";
 import { format, parseISO } from "date-fns";
 import { ko } from "date-fns/locale";
+import { useNavigate, useLocation } from "react-router-dom";
 
 // Tab types
 const TAB_TYPES = {
@@ -18,10 +19,7 @@ const TAB_TYPES = {
 };
 
 const formatDateForApi = (date) => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return `${year}-${month}-${day}`;
+  return format(date, "yyyy-MM-dd");
 };
 
 function Archive() {
@@ -36,6 +34,29 @@ function Archive() {
   const [parentInfo, setParentInfo] = useState(null);
   const [isParentInfoLoading, setIsParentInfoLoading] = useState(true);
   const [parentInfoError, setParentInfoError] = useState(null);
+  const allRecordsRef = useRef(null);
+  const location = useLocation();
+
+  const scrollToBottom = useCallback(() => {
+    if (allRecordsRef.current) {
+      allRecordsRef.current.scrollTo({
+        top: allRecordsRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (location.state?.activeTab) {
+      setActiveTab(location.state.activeTab);
+    }
+    if (location.state?.scrollToBottom) {
+      scrollToBottom();
+    }
+    if (location.state?.selectedDate) {
+      setSelectedDate(location.state.selectedDate);
+    }
+  }, [location.state, scrollToBottom]);
 
   // Fetch parent info when component mounts
   useEffect(() => {
@@ -57,25 +78,22 @@ function Archive() {
     fetchParentInfo();
   }, []);
 
-  const fetchDailyReport = useCallback(
-    async (date) => {
-      if (activeTab !== TAB_TYPES.DAILY_REPORT) return;
+  const fetchDailyReport = useCallback(async () => {
+    if (activeTab !== TAB_TYPES.DAILY_REPORT) return;
 
-      setIsLoading(true);
-      setError(null);
+    setIsLoading(true);
+    setError(null);
 
-      try {
-        const data = await getDailyReport(date);
-        setDailyReport(data);
-      } catch (err) {
-        console.error("Error fetching daily report:", err);
-        setError("데이터를 불러오는 중 오류가 발생했습니다.");
-      } finally {
-        setIsLoading(false);
-      }
-    },
-    [activeTab]
-  );
+    try {
+      const data = await getDailyReport(selectedDate);
+      setDailyReport(data);
+    } catch (err) {
+      console.error("Error fetching daily report:", err);
+      setError("데이터를 불러오는 중 오류가 발생했습니다.");
+    } finally {
+      setIsLoading(false);
+    }
+  }, [activeTab, selectedDate]);
 
   const fetchRecords = useCallback(
     async (date) => {
@@ -101,17 +119,19 @@ function Archive() {
     setSelectedDate(date);
   };
 
-  const handleTabChange = (tabId) => {
-    setActiveTab(tabId);
+  const handleTabChange = (tab) => {
+    setActiveTab(tab);
   };
 
   useEffect(() => {
-    if (activeTab === TAB_TYPES.DAILY_REPORT) {
-      fetchDailyReport(selectedDate);
-    } else {
+    fetchDailyReport();
+  }, [selectedDate, fetchDailyReport]);
+
+  useEffect(() => {
+    if (activeTab === TAB_TYPES.ALL_RECORDS) {
       fetchRecords(selectedDate);
     }
-  }, [selectedDate, activeTab, fetchDailyReport, fetchRecords]);
+  }, [selectedDate, activeTab]);
 
   const tabs = [
     { id: TAB_TYPES.DAILY_REPORT, label: "일일 리포트" },
@@ -144,7 +164,7 @@ function Archive() {
         />
         <ContentContainer>
           {activeTab === TAB_TYPES.DAILY_REPORT ? (
-            <DailyReportContent
+            <DailyReportCard
               date={selectedDate}
               data={dailyReport}
               isLoading={isLoading}
@@ -152,6 +172,7 @@ function Archive() {
             />
           ) : (
             <AllRecordsContent
+              ref={allRecordsRef}
               date={selectedDate}
               records={records}
               isLoading={isRecordsLoading || isParentInfoLoading}
