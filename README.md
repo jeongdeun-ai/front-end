@@ -1,65 +1,82 @@
-# 정든AI Front-end
+<!-- ABOUT THE PROJECT -->
+# 정든 AI
 
----
+정든 AI는 고령의 부모님을 돌보는 보호자를 위해 개발된 AI 기반 고령자 케어 서비스입니다. IoT를 활용한 일상 건강 모니터링부터 정서 상태 분석, 보호자 연동형 대화 유도, 진료·복약 일정 관리, AI 스피커를 통한 실시간 피드백까지 통합한 ‘돌봄 에이전트’입니다. 이 웹은 보호자를 유저로 하며, 보호자는 질문을 직접 보내고, 어르신의 감정 변화를 확인하며, 매일 요약 리포트를 받아보는 방식으로 혼자 계신 부모님을 비대면으로 세심하게 돌볼 수 있습니다.
 
-## 📌 커밋 컨벤션 규칙
+## 주요 기능
 
-커밋 메시지는 **"기능: 기능설명"** 형식으로 작성합니다.
+### 1. 홈 화면
+- 사용자 맞춤 인사와 오늘의 일정을 한눈에 확인
+- 빠른 질문을 위한 바로가기 제공
+- 최근 대화 내역 확인
 
-### ✅ 커밋 유형
+### 2. 질문하기
+- AI 질문 추천 및 부모님께 전송
 
-| 유형       | 설명                                               |
-| ---------- | -------------------------------------------------- |
-| `feat`     | 새로운 기능 추가 또는 기존 기능 수정               |
-| `fix`      | 기능에 대한 버그 수정                              |
-| `build`    | 빌드 관련 수정                                     |
-| `chore`    | 패키지 매니저 수정 및 기타 수정 (예: `.gitignore`) |
-| `docs`     | 문서(주석) 수정                                    |
-| `style`    | 코드 스타일 및 포맷팅 수정 (기능 변경 없음)        |
-| `refactor` | 기능 변경 없이 코드 리팩터링 (예: 변수명 변경)     |
+### 3. 아카이브
+- 과거 대화 내역 검색 및 조회
+- 중요 대화 내용 저장 및 관리
+- 카테고리별 분류 기능
 
-### 📝 커밋 메시지 예시
+### 4. 일정 관리
+- 일정 추가/수정/삭제
+- 약속 알림 설정
+- 반복 일정 관리
 
-```bash
-feat: Add user authentication
-fix: Resolve login button bug
-```
+### 5. 설정
+- 프로필 관리
+- 알림 설정
+- 계정 관리
 
----
+### 6. 회원가입/로그인
+- 이메일 회원가입 및 로그인
 
-## 🌱 브랜치명 컨벤션 (영어로 작성)
 
-- 브랜치명은 **"페이지명/구현 내용"** 형식으로 작성합니다.
-- 페이지명은 대문자로 작성합니다.
+## Built With
+* [![React][React.js]][React-url]
+* [![Vite][Vite]][Vite-url]
 
-### 📌 브랜치명 예시
 
-```bash
-PROJECTS/UI-markup
-AUTH/Login-feature
-```
+## Deployed With
+* [![Vercel][Vercel]][Vercel-url]
 
----
 
-## 📝 이슈 제목 컨벤션 (영어로 작성)
 
-- 이슈 제목은 **"(백틱)페이지명(백틱) + 구현 내용"** 형식으로 작성합니다.
-- 페이지명은 대문자로 작성하여 가독성을 높입니다.
+<!-- GETTING STARTED -->
+## Getting Started
+1. Clone the repo
+   ```sh
+   git clone https://github.com/jeongdeun-ai/front-end
+   ```
+2. Install NPM packages
+   ```sh
+   npm install
+   ```
+3. Enter your API in `.env`
+   ```.env
+   VITE_API_URL = 'ENTER YOUR API';
+   ```
+4. Start with a local development server 
+   ```sh
+   npm run dev
+   ```
 
-### 📌 이슈 제목 예시
 
-```bash
-`PROJECTS` Add Scroll Interaction
-`AUTH` Fix Login Button Alignment
-```
+<!-- CONTACT -->
+## Contact
 
----
+Sunmyeong Lee - 03leesun@gmail.com
 
-## 🚀 개발 환경 및 기술 스택
+Project Link: [https://github.com/jeongdeun-ai/front-end](https://github.com/jeongdeun-ai/front-end)
 
-- **React.js** (프레임워크)
-- **JavaScript**
-- **Vite** (번들러)
-- **ESLint & Prettier** (코드 스타일 관리)
 
----
+
+
+[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
+[linkedin-url]: https://linkedin.com/in/othneildrew
+[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
+[React-url]: https://reactjs.org/
+[Vercel]: https://img.shields.io/badge/vercel-black?style=for-the-badge&logo=vercel&logoColor=white
+[Vercel-url]: https://vercel.com/
+[Vite]: https://img.shields.io/badge/vite-646CFF?style=for-the-badge&logo=vite&logoColor=white
+[Vite-url]: https://vite.dev/
